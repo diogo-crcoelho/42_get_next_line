@@ -6,11 +6,12 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:44 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/06 02:02:37 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/07 14:38:26 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 size_t	ft_strlen(const char *str)
 {
@@ -27,7 +28,7 @@ char	*ft_strjoin(char const *str1, char const *str2)
 	char	*ret;
 	size_t	i;
 	size_t	j;
-	
+
 	ret = (char *)malloc(ft_strlen(str1) + ft_strlen(str2) + 1);
 	if (!ret)
 		return (NULL);
@@ -64,4 +65,17 @@ char	*ft_strdup(const char *str)
 		return (NULL);
 	ft_memcpy(ret, str, size);
 	return (ret);
+}
+
+char	*ft_strchr(const char *str, int c)
+{
+	size_t	i;
+
+	i = -1;
+	while (str[++i])
+		if (((unsigned char *)str)[i] == (unsigned char)c)
+			return ((char *)&str[i]);
+	if (str[i] == (unsigned char)c)
+		return ((char *)&str[i]);
+	return (NULL);
 }

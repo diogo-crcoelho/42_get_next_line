@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:41 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/06 06:39:50 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/07 18:00:34 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,52 @@
 
 #include <fcntl.h>
 #include <stdio.h>
-void	ft_read(int fd)
+
+char	*line(char *line, char **stash)
+{
+	char	*new;
+	int		i;
+
+	free (*stash);
+	*stash = ft_strdup(ft_strchr(line, '\n') + 1);
+	if (!(*stash))
+		return (NULL);
+	i = 0;
+	while (line[i] != '\n')
+		++i;
+	new = (char *)malloc(i + 2);
+	if (!new)
+		return (NULL);
+	ft_memcpy(&new[i], "\n", 2);
+	while (i-- > 0)
+	 	new[i] = line[i];
+	return (new);
+}
+
+char *ft_read(int fd, char **stash)
 {
 	int		bytes;
-	char	temp[BUFFER_SIZE];
+	char	temp[BUFFER_SIZE + 1];
 	char	*line;
+	char	*temp2;
 
-	line = ft_strdup("");
+	if (!(*stash))
+		line = ft_strdup("");
+	else
+		line = ft_strdup(*stash);
 	while (1)
 	{
-		
 		bytes = read(fd, temp, BUFFER_SIZE);
+		if (bytes == -1)
+			return NULL;
+		temp[bytes] = 0;
+		temp2 = ft_strjoin(line, temp);
+		free (line);
+		line = temp2;
 		if (bytes < BUFFER_SIZE)
-			temp[bytes] = 0;
-		printf("-%i-\n", bytes);
-		if (!bytes)
 			break;
-	//	printf("--%s--\n", temp);
-		line = ft_strjoin(line, temp);
 	}
-	printf("%s", line);
+	return (line);
 }
 char	*get_next_line(int fd)
 {
@@ -42,8 +68,12 @@ char	*get_next_line(int fd)
 	
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
-	ft_read(fd);
-
+	char *temp =  ft_read(fd, &stash);
+	//stash = ft_strdup("Helll0\nteste123");
+	//printf("%s-\n", stash);
+	char *teste = line(temp, &stash);
+	printf("line-%s", teste);
+	printf("stash-%s\n", stash);
 	
 }
 
@@ -51,4 +81,5 @@ int main()
 {
 	int fd = open("teste.txt", O_RDONLY);
 	get_next_line(fd);
+	char **t = NULL;
 }
