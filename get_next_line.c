@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:41 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/07 18:31:28 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/07 21:22:01 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ char	*get_line(char *line, char **stash)
 	int		i;
 
 	free (*stash);
-	if (!ft_strchr(line, '\n'))
-		return (NULL);
 	*stash = ft_strdup(ft_strchr(line, '\n') + 1);
 	if (!(*stash))
 		return (NULL);
@@ -45,27 +43,34 @@ char *ft_read(int fd, char **stash)
 	char	temp[BUFFER_SIZE + 1];
 	char	*line;
 	char	*temp2;
+	static int t;
 
 	if (!(*stash))
-		line = ft_strdup("");
-	else
-		line = ft_strdup(*stash);
-	temp2 = get_line(line, stash);
-	if (temp2)
-		return (temp2);
-	while (1)
+		*stash = ft_strdup("");
+	line = ft_strdup(*stash);
+	while ((bytes = read(fd, temp, BUFFER_SIZE)) > 0)
 	{
-		bytes = read(fd, temp, BUFFER_SIZE);
-		if (bytes == -1)
-			return NULL;
+
 		temp[bytes] = 0;
 		temp2 = ft_strjoin(line, temp);
 		free (line);
 		line = temp2;
-		if (bytes < BUFFER_SIZE)
-			break;
+		if (ft_strchr(line, '\n'))
+		{	
+			temp2 = get_line(line, stash);
+			free (line);
+			line = temp2;
+			return (line);
+		}
 	}
-	return (line);
+
+	if (bytes == 0 && t == 0)
+	{
+		t ++;
+		return (line);
+	}
+	free(line);
+	return (NULL);
 }
 char	*get_next_line(int fd)
 {
@@ -74,17 +79,22 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	char *temp =  ft_read(fd, &stash);
-	//stash = ft_strdup("Helll0\nteste123");
-	//printf("%s-\n", stash);
-	return(get_line(temp, &stash));
-	//printf("line-%s", teste);
-	//printf("stash-%s\n", stash);
+	return (temp);
 	
 }
 
-int main()
-{
-	int fd = open("teste.txt", O_RDONLY);
-	get_next_line(fd);
-	char **t = NULL;
-}
+// int main()
+// {
+// 	char *temp;
+// 	int fd = open("teste.txt", O_RDONLY);
+// //	temp = get_next_line(fd);
+// //	printf("%s\n", temp);
+// 	while ((temp = get_next_line(fd)) != NULL)
+// 	{
+
+// 		printf("%s",temp);
+// 		free(temp);
+// 	}
+// 	// temp = ft_strdup("");
+// 	// get_line("teste\n123", &temp);
+// }
