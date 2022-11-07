@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:41 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/07 18:00:34 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/07 18:31:28 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,14 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-char	*line(char *line, char **stash)
+char	*get_line(char *line, char **stash)
 {
 	char	*new;
 	int		i;
 
 	free (*stash);
+	if (!ft_strchr(line, '\n'))
+		return (NULL);
 	*stash = ft_strdup(ft_strchr(line, '\n') + 1);
 	if (!(*stash))
 		return (NULL);
@@ -48,6 +50,9 @@ char *ft_read(int fd, char **stash)
 		line = ft_strdup("");
 	else
 		line = ft_strdup(*stash);
+	temp2 = get_line(line, stash);
+	if (temp2)
+		return (temp2);
 	while (1)
 	{
 		bytes = read(fd, temp, BUFFER_SIZE);
@@ -71,9 +76,9 @@ char	*get_next_line(int fd)
 	char *temp =  ft_read(fd, &stash);
 	//stash = ft_strdup("Helll0\nteste123");
 	//printf("%s-\n", stash);
-	char *teste = line(temp, &stash);
-	printf("line-%s", teste);
-	printf("stash-%s\n", stash);
+	return(get_line(temp, &stash));
+	//printf("line-%s", teste);
+	//printf("stash-%s\n", stash);
 	
 }
 
