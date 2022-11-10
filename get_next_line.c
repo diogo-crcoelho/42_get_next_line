@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 16:09:05 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/10 15:43:31 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/10 20:18:56 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-char	*get_line(char *line, char **stash)
+static char	*get_line(char *line, char **stash)
 {
 	char	*new;
 	int		i;
@@ -73,7 +73,7 @@ char	*get_next_line(int fd)
 	char		*line;
 	static char	*stash;
 
-	if (fd < 0 || BUFFER_SIZE < 1)
+	if (read(fd, 0, 0) || BUFFER_SIZE < 1)
 		return (NULL);
 	line = (char *)malloc(BUFFER_SIZE + 1);
 	if (!line)
@@ -94,7 +94,8 @@ char	*get_next_line(int fd)
 int main()
 {
 	char *temp;
-	int fd = open("teste.txt", O_RDONLY);
+	// int fd = open("teste.txt", O_RDONLY);
+	int fd = open("/nfs/homes/dcarvalh/francinette/tests/get_next_line/gnlTester/files/multiple_nlx5", O_RDONLY);
 
 	//get_next_line(fd);
 	// get_next_line(fd);
@@ -102,10 +103,10 @@ int main()
 	// temp = get_next_line(fd);
 	// temp = get_next_line(fd);
 	// printf("%s\n", temp);
-	while ((temp = get_next_line(fd)) != NULL)
-	// for(int i = 0; i < 3; i ++)
+	// while ((temp = get_next_line(fd)) != NULL)
+	for(int i = 0; i < 2; i ++)
 	{
-		// temp = get_next_line(fd);
+		temp = get_next_line(fd);
 		printf("%s",temp);
 		free(temp);
 	}
