@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:35 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/08 16:41:31 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/11 18:51:16 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,13 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE 2
 # endif
 
 char	*get_next_line(int fd);
 char	*ft_strjoin(char const *str1, char const *str2);
-char	*ft_strdup(const char *str);
-void	*ft_memcpy(void *dest, const void *src, size_t n);
-char	*ft_strchr(const char *str, int c);
 size_t	ft_strlen(const char *str);
+int		next_line(char *stash);
+
 
 #endif

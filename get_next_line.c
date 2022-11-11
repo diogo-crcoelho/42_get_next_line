@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 16:09:05 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/10 20:18:56 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/11 19:27:20 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,100 +16,25 @@
 #include <fcntl.h>
 #include <stdio.h>
 
-static char	*get_line(char *line, char **stash)
-{
-	char	*new;
-	int		i;
-
-	free (*stash);
-	*stash = ft_strdup(ft_strchr(line, '\n') + 1);
-	if (!(*stash))
-		return (NULL);
-	i = 0;
-	while (line[i] != '\n')
-		++i;
-	new = (char *)malloc(i + 2);
-	if (!new)
-		return (NULL);
-	ft_memcpy(&new[i], "\n", 2);
-	while (i-- > 0)
-	 	new[i] = line[i];
-	free (line);
-	return (new);
-}
-
-char	*ft_read(int fd, char **stash)
-{
-	int		bytes;
-	char	temp[BUFFER_SIZE + 1];
-	char	*line;
-	char	*temp2;
-
-	if (!(*stash))
-		*stash = ft_strdup("");
-	line = ft_strdup(*stash);
-	while (1)
-	{
-		bytes = read(fd, temp, BUFFER_SIZE);
-		if (bytes < 0)
-			return (NULL);
-		if (bytes == 0)
-			break;
-		temp[bytes] = 0;
-		temp2 = ft_strjoin(line, temp);
-		free (line);
-		line = temp2;
-		if (ft_strchr(temp, '\n'))
-			return (get_line(line, stash));
-	}
-	free(*stash);
-	*stash = ft_strdup(line);
-	free (line);
-	return (NULL);	
-}
-
 char	*get_next_line(int fd)
 {
 	char		*line;
-	static char	*stash;
+	static char	stash[BUFFER_SIZE + 1];
+	size_t		i = -1;
 
-	if (read(fd, 0, 0) || BUFFER_SIZE < 1)
+	line = NULL;
+	if (read(fd, 0, 0) < 0 || BUFFER_SIZE < 1)
+	{	
+		while (stash[++i])
+			stash[i] = 0;
 		return (NULL);
-	line = (char *)malloc(BUFFER_SIZE + 1);
-	if (!line)
-		return (NULL);
-	free (line);
-	line = ft_read(fd, &stash);
-	if (line)
-		return (line);	
-	line = stash;
-	stash = NULL;
-	if (*line)
-		return (line);
-	free(line);
-	return (NULL);
-	// printf("-%s\n", line);
-}
-
-int main()
-{
-	char *temp;
-	// int fd = open("teste.txt", O_RDONLY);
-	int fd = open("/nfs/homes/dcarvalh/francinette/tests/get_next_line/gnlTester/files/multiple_nlx5", O_RDONLY);
-
-	//get_next_line(fd);
-	// get_next_line(fd);
-
-	// temp = get_next_line(fd);
-	// temp = get_next_line(fd);
-	// printf("%s\n", temp);
-	// while ((temp = get_next_line(fd)) != NULL)
-	for(int i = 0; i < 2; i ++)
-	{
-		temp = get_next_line(fd);
-		printf("%s",temp);
-		free(temp);
 	}
-	// temp = ft_strdup("");
-	// get_line("teste\n123", &temp);
+	while (*stash || read(fd, stash, BUFFER_SIZE) > 0)
+	{
+		line = ft_strjoin(line, stash);
+		if (next_line(stash))
+			break;
+	}
+	return (line);
 }
+
