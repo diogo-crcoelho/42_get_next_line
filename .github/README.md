@@ -15,7 +15,7 @@ variables.
 Link to the subject [here](https://cdn.intra.42.fr/pdf/pdf/66020/en.subject.pdf)
 
 ## Tests
-My project was tested using some mains created by me, and using [Trippouile's](https://github.com/Tripouille/printfTester) and [Paulo Santana's](https://github.com/paulo-santana/ft_printf_tester) testers.
+My project was tested using some mains created by me, and using [francinette](https://github.com/xicodomingues/francinette)
 
 ## Grade
 [![dcarvalh's 42 Libft Score](https://badge42.vercel.app/api/v2/cla00p6vf01030fmmu3t8t7ju/project/2848859)](https://github.com/JaeSeoKim/badge42)
