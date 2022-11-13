@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/05 23:52:44 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/11 19:26:55 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/13 12:03:25 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,33 +54,25 @@ int	next_line(char *stash)
 	int	i;
 	int	j;
 	
-	i = 0;
+	i = -1;
 	j = -1;
-	while (stash[i]){
-
-		if (j != -1)
-			stash[j++] = stash[i];
-		if (j == -1 && stash[i] == '\n')
-			j++;
-		stash [i++] = 0;
+	while (stash[++i])
+	{
+		if (stash[i] == '\n')
+		{
+			stash[i++] = 0;
+			j = 0;
+			break;
+		}
+		stash[i] = 0;
 	}
-	// while (stash[++i])
-	// {
-	// 	if (stash[i] == '\n')
-	// 	{
-	// 		stash[i] = 0;
-	// 		j = 0;
-	// 		break;
-	// 	}
-	// 	stash[i] = 0;
-	// }
-	// if (!j)
-	// {
-	// 	while (stash[i])
-	// 	{
-	// 		stash[j++] = stash[i];
-	// 		stash[i++] = 0;
-	// 	}
-	// }
-	return (j != -1);
+	if (!j)
+	{
+		while (stash[i])
+		{
+			stash[j++] = stash[i];
+			stash[i++] = 0;
+		}
+	}
+	return (j);
 }

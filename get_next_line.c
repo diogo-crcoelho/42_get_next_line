@@ -6,7 +6,7 @@
 /*   By: dcarvalh <dcarvalh@student.42lisboa.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 16:09:05 by dcarvalh          #+#    #+#             */
-/*   Updated: 2022/11/11 19:27:20 by dcarvalh         ###   ########.fr       */
+/*   Updated: 2022/11/13 12:01:21 by dcarvalh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*get_next_line(int fd)
 	while (*stash || read(fd, stash, BUFFER_SIZE) > 0)
 	{
 		line = ft_strjoin(line, stash);
-		if (next_line(stash))
+		if (next_line(stash) != -1)
 			break;
 	}
 	return (line);
